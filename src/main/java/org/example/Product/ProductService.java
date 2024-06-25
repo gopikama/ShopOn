@@ -21,4 +21,18 @@ public class ProductService {
     public void addProduct(Product product){
         products.add(product);
     }
+
+    public void updateProduct(String productId,Product product) {
+        for(int i=0; i<products.size(); i++){
+            Product p=products.get(i);
+            if(p.getProductId().equals(productId)){
+                products.set(i,product);
+                return;
+            }
+        }
+    }
+
+    public void deleteProduct(String productId) {
+        products.removeIf(p -> p.getProductId().equals(productId));
+    }
 }
