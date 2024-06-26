@@ -1,38 +1,36 @@
 package org.example.Product;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductService {
-    List<Product> products = new ArrayList<>(Arrays.asList(
-            new Product("0001","Reebok Shoes","Running shoes","Footwear",1500.00F),
-                new Product("0002","Sketcher Shoes","Running shoes","Footwear",1300.00F)
-        ));
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Product> getAllProducts(){
+        List<Product> products=new ArrayList<>();
+        productRepository.findAll().forEach(products::add);
         return products;
     }
-    public Product getProduct(String productId){
-        return products.stream().filter( t->t.getProductId().equals(productId)).findFirst().get();
+    public Optional<Product> getProduct(String productId){
+        Optional<Product> p;
+        p=productRepository.findById(productId);
+        return p;
     }
     public void addProduct(Product product){
-        products.add(product);
+        productRepository.save(product);
     }
 
     public void updateProduct(String productId,Product product) {
-        for(int i=0; i<products.size(); i++){
-            Product p=products.get(i);
-            if(p.getProductId().equals(productId)){
-                products.set(i,product);
-                return;
-            }
-        }
+        productRepository.save(product);
     }
 
     public void deleteProduct(String productId) {
-        products.removeIf(p -> p.getProductId().equals(productId));
+        productRepository.deleteById(productId);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -17,7 +18,7 @@ public class ProductController {
     }
 
     @RequestMapping("/products/{productId}")
-    public Product getProduct(@PathVariable String productId) {
+    public Optional<Product> getProduct(@PathVariable String productId) {
         return productServiceObj.getProduct(productId);
     }
 
