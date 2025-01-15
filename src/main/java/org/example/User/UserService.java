@@ -24,8 +24,8 @@ public class UserService {
         user = new User(userName, userEmail, userPassword, userAddress, userPhone);
         userRepository.save(user);
 
-        // initialize the cart for this user using CartService
-        cartService.createCart(user);
+        // initialize the cart for this user using CartService-not needed created during login
+        //cartService.createCart(user);
         return user;
     }
 

@@ -1,7 +1,10 @@
 package org.example.User;
 
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.example.Cart.Cart;
+import org.example.Cart.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +19,9 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     UserService userServiceObj;
+
+    @Autowired
+    CartService cartServiceObj;
 
     @Autowired
     private AuthenticationManager authenticationManager;  // Spring Security authentication manager
@@ -43,7 +49,8 @@ public class UserController {
     }
 
     @PostMapping("/api/v1/login")
-    public String loginUser(@RequestBody User loginUser) {
+    public ResponseEntity<String> loginUser(@RequestBody User loginUser) {
+
         String email = loginUser.getUserEmail();
         String password = loginUser.getUserPassword();
         try {
@@ -53,21 +60,21 @@ public class UserController {
                      email,password
                 )
             );
-
             // Set the authentication context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+            // Fetch the authenticated user
+            User user = userServiceObj.getUserByEmail(email);
+            if (user == null) {
+                return ResponseEntity.status(404).body("User not found!");
+            }
 
-            /*Optional<User> user = userServiceObj.getUserByEmail(email);
-            if (user.isPresent() && user.get().getUserPassword().equals(password)) {
+            //Assign cart to user if it doesn't exist
+            cartServiceObj.createCart(user);
 
-                return "Login successful for user: " + email;
-            } else {
-                return "Invalid email or password";
-            }*/
-            return "Login successful for user: " + email;
+            return ResponseEntity.ok("Login successful for user: " + email);
         }catch(Exception e){
-            return "Authentication failure";
+            return ResponseEntity.status(401).body("Authentication failure: " + e.getMessage());
         }
     }
 }
