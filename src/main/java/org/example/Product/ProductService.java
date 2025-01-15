@@ -14,7 +14,8 @@ public class ProductService {
 
     public List<Product> getAllProducts(){
         List<Product> products=new ArrayList<>();
-        productRepository.findAll().forEach(products::add);
+        productRepository.findAll()
+                .forEach(products::add);
         return products;
     }
     public Optional<Product> getProduct(String productId){

@@ -1,9 +1,11 @@
 package org.example.Product;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 
 @Entity
+@Table(name = "product")
 public class Product {
     @Id
     private String productId;
@@ -11,6 +13,9 @@ public class Product {
     private String productDescription;
     private String productCategory;
     private Float productPrice;
+
+    public Product(){
+    }
 
     public Product(String productId, String productName, String productDescription, String productCategory, Float productPrice) {
         super();
