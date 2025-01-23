@@ -40,9 +40,5 @@ public class UserService {
         return userRepository.findByUserEmail(email);
     }
 
-    //getters and setters
-    public User getUser() {
-        return user;
-    }
 
 }

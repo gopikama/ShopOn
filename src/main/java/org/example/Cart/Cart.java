@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import java.util.List;
 import java.util.UUID;
 
+import org.example.CartItem.CartItem;
 import org.example.User.User;
 
 
@@ -19,6 +21,10 @@ public class Cart {
     private User user;
     @Column(nullable = false)
     private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
+
 
     //default constructor
     public Cart() {

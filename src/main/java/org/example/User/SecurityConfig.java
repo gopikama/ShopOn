@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 
 import java.util.List;
 
@@ -35,12 +37,14 @@ public class SecurityConfig {
                 .csrf().disable() // Disable CSRF for testing purposes, enable it in production
                 .cors().and()
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/v1/login", "/api/v1/registration",  "/swagger-ui/**",
+                        .requestMatchers("/api/v1/login", "/api/v1/registration","/api/v1/dashboard","/api/v1/products", "/swagger-ui/**",
                                 "/v3/api-docs/**").permitAll() // Public routes
-                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated() // All other routes require authentication
-
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Create sessions if required
                 );
+
 
         return http.build();
     }
